@@ -277,7 +277,8 @@ Licensed under either of
 - Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE))
 - MIT license ([LICENSE-MIT](LICENSE-MIT))
 
-at your option, the same dual license as pigeons.
+at your option, the same dual license as pigeons. You may pick either one;
+you do not have to satisfy both. See [COPYRIGHT](COPYRIGHT) for the summary.
 
 Unless you state otherwise, any contribution you intentionally submit for
 inclusion in this work shall be dual licensed as above, without any additional
