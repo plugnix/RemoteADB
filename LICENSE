@@ -1,0 +1,16 @@
+remoteadb is dual licensed, at your option, under either of:
+
+  * Apache License, Version 2.0 -- see LICENSE-APACHE
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  * MIT license -- see LICENSE-MIT
+    https://opensource.org/licenses/MIT
+
+SPDX-License-Identifier: MIT OR Apache-2.0
+
+You may choose either license. You do not have to comply with both.
+
+This is the same dual license as pigeons
+(https://github.com/n0-computer/pigeons), from which remoteadb is derived.
+Copyright notices for the upstream authors are retained in both license
+files, and NOTICE records which files are derived and how they changed.
