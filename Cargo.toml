@@ -1,0 +1,85 @@
+[package]
+name = "remoteadb"
+description = "adb to a device plugged into another machine, over iroh with private relays"
+license = "MIT OR Apache-2.0"
+authors = ["Aaron <aaron@plugnix.com>"]
+repository = "https://github.com/plugnix/RemoteADB"
+readme = "README.md"
+keywords = ["networking", "adb", "android", "iroh"]
+categories = ["network-programming"]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.91"
+
+[lints.rust]
+elided_lifetimes_in_paths = "warn"
+unnameable_types = "warn"
+unreachable_pub = "warn"
+missing_debug_implementations = "warn"
+
+[lints.clippy]
+or_fun_call = "warn"
+use_self = "warn"
+unused_async = "warn"
+absolute_paths = "warn"
+manual_let_else = "warn"
+allow_attributes_without_reason = "warn"
+mod_module_files = "deny"
+
+[[bin]]
+name = "remoteadb"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0.102"
+iroh = "1"
+iroh-tickets = "1"
+ed25519-dalek = { version = ">=3.0.0-rc.0", features = ["rand_core"] }
+tokio-stream = { version = "0.1.18", features = ["sync"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["fmt", "ansi", "env-filter"] }
+tracing-appender = "0.2.5"
+tokio = { version = "1.52.3", features = [
+    "signal",
+    "macros",
+    "io-util",
+    "sync",
+    "rt",
+    "rt-multi-thread",
+    "net",
+    "fs",
+    "time",
+    "process",
+] }
+tokio-util = "0.7"
+clap = { version = "4.6.1", features = ["derive"] }
+homedir = "0.3.6"
+whoami = "2.1.2"
+z32 = "1.3"
+tempfile = "3.27.0"
+self-runas = "0.1"
+serde = { version = "1.0.228", features = ["derive"] }
+toml = "1.1.2"
+dirs = "6.0.0"
+
+[target.'cfg(windows)'.dependencies.windows-service]
+version = "0.8.1"
+[target.'cfg(windows)'.dependencies.windows-sys]
+version = "0.61.2"
+features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Security_Authorization",
+    "Win32_Storage_FileSystem",
+    "Win32_System_Power",
+    "Win32_System_RemoteDesktop",
+    "Win32_System_Services",
+    "Win32_System_SystemServices",
+    "Win32_System_Threading",
+    "Win32_System_WindowsProgramming",
+    "Win32_UI_WindowsAndMessaging",
+]
+[profile.release]
+opt-level = 3
+lto = true
+panic = "abort"

@@ -1,0 +1,65 @@
+remoteadb
+Copyright 2026 Aeronautix Innovations LLC
+
+This product is a derivative work of pigeons, which tunnels SSH connections
+over iroh:
+
+    pigeons
+    https://github.com/n0-computer/pigeons
+    Copyright 2025 fun with rust y2
+    Copyright 2026 N0, INC.
+    Licensed under MIT OR Apache-2.0
+
+The fork point is pigeons commit 02e5bdecaf2360aa49a8fd048df7fcfa8cede38b,
+also recorded in UPSTREAM_PIGEONS_COMMIT. remoteadb keeps the same dual
+MIT OR Apache-2.0 license as pigeons.
+
+Files substantially derived from pigeons, in descending order of how much
+upstream code remains:
+
+    src/service/windows.rs            Windows service backend, near verbatim
+    src/service/windows/firewall.rs   Windows firewall rules, near verbatim
+    src/service/macos.rs              launchd backend, renamed and reworked
+    src/service/linux.rs              systemd backend, plus a new user-unit path
+    src/service.rs                    service dispatch, plus ticket publishing
+    src/keys.rs                       z32 key load/store, from upstream ssh.rs
+    src/tunnel.rs                     endpoint builder and TCP/QUIC bridging
+    src/protocol.rs                   the flushing copy loop
+    src/main.rs                       CLI skeleton and service subcommands
+    .github/workflows/ci.yml          CI matrix
+    Makefile.toml                     cargo-make tasks
+    service/*.sh                      service install and uninstall scripts
+
+Files written for remoteadb, with no upstream equivalent:
+
+    src/adb.rs                        adb server supervision
+    src/config.rs                     layered TOML config, allowlist, saved hosts
+    src/host.rs                       host role wiring and allowlist reload
+    deployment/*                      private iroh-relay configuration
+    Makefile                          build conventions
+
+Summary of changes made to the derived files:
+
+  * The tunnel targets a local adb server rather than sshd, and the host
+    supervises `adb nodaemon server` instead of merely probing for a daemon.
+  * Connections are gated by an endpoint-ID allowlist, checked immediately
+    after the QUIC handshake. Upstream needed no such check because sshd
+    authenticates its own callers; adb has no authentication at all.
+  * Endpoint discovery is disabled. Upstream builds endpoints with
+    presets::N0, which publishes to and resolves through n0's DNS and pkarr
+    servers even when custom relays are configured. remoteadb uses
+    presets::Minimal and requires an explicit relay URL, so no endpoint
+    information leaves the configured relays.
+  * Peers are addressed by ticket (endpoint ID plus relay URL) rather than
+    by bare endpoint ID, which discovery would otherwise have to resolve.
+  * The client holds one QUIC connection per host and opens a stream per
+    TCP connection, where upstream dialed a new connection each time.
+  * SSH config file manipulation and the ProxyCommand stdio mode were
+    removed, replaced by a named-host list and a local TCP listener.
+  * iroh-services telemetry was removed entirely.
+  * The Linux service backend gained a per-user systemd unit.
+  * The iroh dependency was updated from 1.0 to 1.3.
+
+This product depends on iroh, also by N0, INC., obtained from crates.io under
+MIT OR Apache-2.0. See Cargo.toml and Cargo.lock for the full dependency set
+and its versions.
